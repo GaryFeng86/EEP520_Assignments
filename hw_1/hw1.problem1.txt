@@ -1,0 +1,137 @@
+﻿**********************
+Windows PowerShell Script Start
+Started: 20240120191911
+Username: Dell Computer\undeafeatedF
+RunAs User: Dell Computer \undeafeatedF
+Configuration Name. 
+Computer: Dell Computer (Microsoft Windows NT 10.0.22621.0)
+Host Application: C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe
+Process ID: 8872
+PSVersion: 5.1.22621.2506
+PSEdition: Desktop
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1.22621.2506
+BuildVersion: 10.0.22621.2506
+CLRVersion: 4.0.30319.42000
+WSManStackVersion: 3.0
+PSRemotingProtocolVersion: 2.3
+SerializationVersion: 1.1.0.1
+**********************
+The script has been started and the output file is . \hw1.problem1.txt
+PS C:\Users\undeafeatedF> Write-Output "Hello and welcome to the new quarter!"
+Hello and welcome to the new quarter!
+PS C:\Users\undeafeatedF> Get-Date
+
+January 20, 2024 19:19:27
+
+
+PS C:\Users\undeafeatedF> $home
+C:\Users\undeafeatedF
+PS C:\Users\undeafeatedF> cd $home
+PS C:\Users\undeafeatedF> Get-ChildItem
+
+
+    Directory: C:\Users\undeafeatedF
+
+
+Mode                 LastWriteTime         Length Name
+----                 -------------         ------ ----
+d-----          2022/7/3     11:01                .android
+d-----          2023/3/4     21:12                .conda
+d-----         2021/5/21     19:53                .continuum
+d-----         2021/3/20     17:56                .dotnet
+d-----          2022/7/3     11:02                .gradle
+d-----         2021/5/21     21:05                .ipython
+d-----         2021/5/21     21:20                .jupyter
+d-----          2023/3/9     20:58                .keras
+d-----         2022/5/25     14:55                .local
+d-----        2020/12/15     15:22                .m2
+d-----         2021/5/21     21:08                .matplotlib
+d-----        2020/12/15     15:22                .myeclipse
+d-----         2023/1/12      1:01                .oracle_jre_usage
+d-----         2021/9/14     17:31                .spyder-py3
+d-r---         2021/4/28     15:24                3D Objects
+d-----        2019/12/11     22:33                ansel
+d-r---         2023/2/10     14:11                Contacts
+d-r---         2024/1/16     13:12                Desktop
+d-r---          2023/6/9     19:07                Documents
+d-r---         2023/7/16     21:42                Downloads
+d-r---         2023/2/10     14:11                Favorites
+d-r---         2023/2/10     14:11                Links
+d-r---         2023/2/10     14:11                Music
+dar--l         2022/2/17     19:59                OneDrive
+d-r---         2023/9/13      1:17                Pictures
+d-----          2022/7/3     15:47                Postman
+d-----         2019/7/30      2:08                Roaming
+d-r---         2023/2/10     14:11                Saved Games
+d-r---         2023/2/10     14:11                Searches
+d-----         2020/4/21     23:33                source
+d-----         2021/10/2     20:14                UIDowner
+d-r---         2024/1/17     14:06                Videos
+d-----          2021/4/2     20:58                新建文件夹
+-a----          2021/1/5     19:21            743 .bash_history
+-a----         2021/5/21     19:55             25 .condarc
+-a----        2020/12/15     21:05             90 .deliverycenter.installs
+-a----        2020/12/15     15:20             67 .deliverycenter.system
+-a----         2021/3/11     17:30            178 .gitconfig
+-a----        2020/12/15     21:08            551 .myeclipse.properties
+-a----        2021/10/14     20:18              0 cd
+-a----        2021/10/15     17:00              0 conda
+-a----         2024/1/20     14:49             48 hw1.problem1
+-a----         2024/1/20     19:19              0 hw1.problem1.txt
+-a----         2021/9/14     16:33              0 import
+-a----         2023/3/31     22:06        1281710 mysqlclient-1.4.6-cp37-cp37m-win_amd64.whl
+-a----         2021/9/14     16:33              0 print
+-a----         2024/1/20     13:40             34 secretfile
+
+
+PS C:\Users\undeafeatedF> New-Item -ItemType Directory -Name 'temp'
+
+
+    PS C:\Users\undeafeatedF
+
+
+Mode                 LastWriteTime         Length Name
+----                 -------------         ------ ----
+d-----         2024/1/20     19:19                temp
+
+
+PS C:\Users\undeafeatedF> Rename-Item -Path 'temp' -NewName 'temp_new'
+PS C:\Users\undeafeatedF> cd 'temp_new'
+PS C:\Users\undeafeatedF\temp_new> New-Item -ItemType File -Name 'file5'
+
+
+    PS C:\Users\undeafeatedF\temp_new
+
+
+Mode                 LastWriteTime         Length Name
+----                 -------------         ------ ----
+-a----         2024/1/20     19:20              0 file5
+
+
+PS C:\Users\undeafeatedF\temp_new> Rename-Item -Path 'file5' -NewName 'test'
+PS C:\Users\undeafeatedF\temp_new> cd ..
+PS C:\Users\undeafeatedF> Remove-Item -Path 'temp_new' -Recurse
+PS C:\Users\undeafeatedF> echo "It's a secret!" | Out-File -FilePath 'secretfile'
+PS C:\Users\undeafeatedF> icacls 'secretfile' /deny Everyone:W
+
+PS C:\Users\undeafeatedF> cat 'secretfile'
+cat : Access to the path "C:\Users\undeafeatedF\secretfile" is denied.
+At line:1 char:1
++ cat 'secretfile'
++ ~~~~~~~~~~~~~~~~
+    + CategoryInfo : PermissionDenied: (C:\Users\undeafeatedF\secretfile:String) [Get-Content], UnauthorizedAccessException
+    + FullyQualifiedErrorId : GetContentReaderUnauthorizedAccessError, Microsoft.PowerShell.Commands.GetContentCommand
+
+cat : Access to the path "C:\Users\undeafeatedF\secretfile" is denied.
+At line:1 char:1
++ cat 'secretfile'
++ ~~~~~~~~~~~~~~~~
+    + CategoryInfo : PermissionDenied: (C:\Users\undeafeatedF\secretfile:String) [Get-Content], UnauthorizedAccessException
+    + FullyQualifiedErrorId : GetContentReaderUnauthorizedAccessError, Microsoft.PowerShell.Commands.GetContentCommand
+
+PS C:\Users\undeafeatedF> Stop-Transcript
+**********************
+Windows PowerShell transcript end
+End time: 20240120192057
+**********************
+
