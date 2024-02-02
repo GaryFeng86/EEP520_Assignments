@@ -1,9 +1,6 @@
-// main.c
-#include "test_framework.h"
+#include "gtest/gtest.h"
 
-int main() {
-    // Run the tests
-    RUN_TESTS();
-
-    return 0;
+int main(int argc, char **argv) {
+    ::testing::InitGoogleTest(&argc, argv);
+    return RUN_ALL_TESTS();
 }
