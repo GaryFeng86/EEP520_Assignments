@@ -11,7 +11,7 @@ typedef struct {
 } DynamicArray;
 
 /* Constructors / Destructors ************************************************/
-
+int numConstructedArrays = 0;
 DynamicArray * DynamicArray_new(void);
 void DynamicArray_destroy(DynamicArray *);
 
@@ -87,5 +87,17 @@ int DynamicArray_num_arrays();
 void DynamicArray_destroy_all();
 
 DynamicArray * DynamicArray_subarray(DynamicArray *, int, int);
+
+int DynamicArray_num_arrays() {
+    return numConstructedArrays;
+}
+
+void DynamicArray_destroy_all() {
+    numConstructedArrays = 0;
+}
+
+int DynamicArray_is_valid(const DynamicArray *da) {
+    return da->buffer != NULL;
+}
 
 #endif

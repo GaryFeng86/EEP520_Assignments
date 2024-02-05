@@ -47,12 +47,15 @@ static void extend_buffer ( DynamicArray * da ) {
 
 /* public functions **********************************************************/
 
-DynamicArray * DynamicArray_new(void) {
-    DynamicArray * da = (DynamicArray *) malloc(sizeof(DynamicArray));
-    da->capacity = DYNAMIC_ARRAY_INITIAL_CAPACITY;    
-    da->buffer = (double *) calloc ( da->capacity, sizeof(double) ); 
+DynamicArray *DynamicArray_new(void) {
+    DynamicArray *da = (DynamicArray *)malloc(sizeof(DynamicArray));
+    da->capacity = DYNAMIC_ARRAY_INITIAL_CAPACITY;
+    da->buffer = (double *)calloc(da->capacity, sizeof(double));
     da->origin = da->capacity / 2;
     da->end = da->origin;
+
+    numConstructedArrays++;
+
     return da;
 }
 
@@ -166,17 +169,172 @@ DynamicArray * DynamicArray_map(const DynamicArray * da, double (*f) (double)) {
     return result;
 }
 
-DynamicArray * DynamicArray_subarray(DynamicArray * da, int a, int b) {
+DynamicArray *DynamicArray_subarray(DynamicArray *da, int a, int b) {
+    assert(da->buffer != NULL);
+    assert(b >= a);
 
-  assert(da->buffer != NULL);
-  assert(b >= a);
+    DynamicArray *result = DynamicArray_new();
 
-  DynamicArray * result = DynamicArray_new();
+    for (int i = a; i < b; i++) {
+        DynamicArray_push(result, DynamicArray_get(da, i));
+    }
 
-  for (int i=a; i<b; i++) {
-      DynamicArray_push(result,DynamicArray_get(da, i));
-  }
+    numConstructedArrays++;
 
-  return result;
-
+    return result;
 }
+
+double DynamicArray_min(const DynamicArray *da) {
+    assert(DynamicArray_size(da) > 0);
+    double min_val = DynamicArray_get(da, 0);
+    for (int i = 1; i < DynamicArray_size(da); ++i) {
+        double current = DynamicArray_get(da, i);
+        if (current < min_val) {
+            min_val = current;
+        }
+    }
+    return min_val;
+}
+
+double DynamicArray_max(const DynamicArray *da) {
+    assert(DynamicArray_size(da) > 0);
+    double max_val = DynamicArray_get(da, 0);
+    for (int i = 1; i < DynamicArray_size(da); ++i) {
+        double current = DynamicArray_get(da, i);
+        if (current > max_val) {
+            max_val = current;
+        }
+    }
+    return max_val;
+}
+
+double DynamicArray_mean(const DynamicArray *da) {
+    assert(DynamicArray_size(da) > 0);
+    double sum = 0.0;
+    for (int i = 0; i < DynamicArray_size(da); ++i) {
+        sum += DynamicArray_get(da, i);
+    }
+    return sum / DynamicArray_size(da);
+}
+
+double DynamicArray_median(const DynamicArray *da) {
+    assert(DynamicArray_size(da) > 0);
+    DynamicArray *sorted = DynamicArray_copy(da);
+    std::sort(sorted->buffer, sorted->buffer + DynamicArray_size(da));
+    double median;
+    if (DynamicArray_size(da) % 2 == 0) {
+        // Even number of elements
+        int mid = DynamicArray_size(da) / 2;
+        median = (DynamicArray_get(sorted, mid - 1) + DynamicArray_get(sorted, mid)) / 2.0;
+    } else {
+        // Odd number of elements
+        int mid = DynamicArray_size(da) / 2;
+        median = DynamicArray_get(sorted, mid);
+    }
+    DynamicArray_destroy(sorted);
+    return median;
+}
+
+double DynamicArray_sum(const DynamicArray *da) {
+    double sum = 0.0;
+    for (int i = 0; i < DynamicArray_size(da); ++i) {
+        sum += DynamicArray_get(da, i);
+    }
+    return sum;
+}
+double DynamicArray_last(const DynamicArray *da) {
+    assert(DynamicArray_size(da) > 0);
+    return DynamicArray_get(da, DynamicArray_size(da) - 1);
+}
+
+double DynamicArray_first(const DynamicArray *da) {
+    assert(DynamicArray_size(da) > 0);
+    return DynamicArray_get(da, 0);
+}
+
+DynamicArray *DynamicArray_copy(const DynamicArray *da) {
+    assert(da->buffer != NULL);
+
+    DynamicArray *copy = DynamicArray_new();
+
+    for (int i = 0; i < DynamicArray_size(da); ++i) {
+        DynamicArray_push(copy, DynamicArray_get(da, i));
+    }
+
+    numConstructedArrays++;
+
+    return copy;
+}
+
+
+DynamicArray *DynamicArray_range(double a, double b, double step) {
+    assert(step != 0);
+
+    DynamicArray *rangeArray = DynamicArray_new();
+
+    if (a <= b) {
+        for (double val = a; val <= b; val += step) {
+            DynamicArray_push(rangeArray, val);
+        }
+    } else {
+        for (double val = a; val >= b; val += step) {
+            DynamicArray_push(rangeArray, val);
+        }
+    }
+
+    numConstructedArrays++;
+
+    return rangeArray;
+}
+DynamicArray *DynamicArray_concat(const DynamicArray *a, const DynamicArray *b) {
+    assert(a->buffer != NULL && b->buffer != NULL);
+
+    DynamicArray *concatenated = DynamicArray_new();
+
+    for (int i = 0; i < DynamicArray_size(a); ++i) {
+        DynamicArray_push(concatenated, DynamicArray_get(a, i));
+    }
+
+    for (int i = 0; i < DynamicArray_size(b); ++i) {
+        DynamicArray_push(concatenated, DynamicArray_get(b, i));
+    }
+
+    numConstructedArrays++;
+
+    return concatenated;
+}
+
+DynamicArray *DynamicArray_take(const DynamicArray *da, int n) {
+    assert(da->buffer != NULL);
+
+    DynamicArray *subArray = DynamicArray_new();
+
+    if (n >= 0) {
+        for (int i = 0; i < DynamicArray_size(da) && i < n; ++i) {
+            DynamicArray_push(subArray, DynamicArray_get(da, i));
+        }
+
+        // Fill remaining elements with zero if needed
+        for (int i = DynamicArray_size(subArray); i < n; ++i) {
+            DynamicArray_push(subArray, 0.0);
+        }
+    } else {
+        // Take from the end
+        int startIdx = DynamicArray_size(da) + n;
+        startIdx = (startIdx < 0) ? 0 : startIdx;
+
+        for (int i = startIdx; i < DynamicArray_size(da); ++i) {
+            DynamicArray_push(subArray, DynamicArray_get(da, i));
+        }
+
+        // Fill remaining elements with zero if needed
+        for (int i = DynamicArray_size(subArray); i < -n; ++i) {
+            DynamicArray_push(subArray, 0.0);
+        }
+    }
+
+    numConstructedArrays++;
+
+    return subArray;
+}
+
